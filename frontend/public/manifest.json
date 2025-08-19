@@ -1,8 +1,0 @@
-{
-  "short_name": "CourseMate",
-  "name": "CourseMate - Course Management System",
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#2563eb",
-  "background_color": "#ffffff"
-}
