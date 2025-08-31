@@ -216,8 +216,8 @@ The application will be available at `http://localhost:3000`
 1. **Registration**: Create account
 2. **Course Discovery**: Browse & enroll
 3. **Learning**: Access materials & resources
-4. **Productivity Management**: Keep track of tasks with priority based filtering, visual statistics and engage timers to start focused study sessions.
-5. **AI-based Learning**: Generate flashcards to test content comprehension, start quizzes to assess personal learning. 
+4. **Productivity Management**: Create tasks, subdivisions, mark task as complete, filter tasks by priority/category, view completed tasks in a graph
+5. **AI-based Learning**: Generate flashcards, start quiz, summarize resource & ask AI for explanations 
 6. **Collaboration**: Engage via direct/group chat
 7. **Stay Informed**: Receive notifications
 
