@@ -1,6 +1,6 @@
-# Course Management Platform (CourseMate)
+# CourseMate - Study Resource Sharing Platform
 
-Modernized MERN application focused on courses, enrollments, learning resources, real-time direct & group chat, and notifications. (Legacy assignments, grades, attendance, and inbox-style messaging have been fully removed.)
+Modernized MERN application focused on sharing study resources, AI-based practice tools, productivity management, gamification, real-time messaging & notifications. 
 
 ## Features Overview
 
@@ -10,6 +10,9 @@ This system supports two roles with role-based access control: Student and Admin
 - **Registration & Profile**: Simple signup and profile management
 - **Course Enrollment**: Browse approved courses and enroll (capacity enforced)
 - **Course Materials & Resources**: Access approved resources and materials after enrollment
+- **AI-powered Learning**: Access Gemini summarized content, ask questions based on the uploaded resources, generate flashcards or start quizzes to assess own learning
+- **Productivity Tools**: Keep track of tasks with subdivisions, categorization, priority & tags, view completion history graphically, engage in focused study sessions using Pomodoro or custom timers
+- **Gamification**: Earn XP for completing focused study sessions, quizzes or practicing with flashcards, level up and stay engaged 
 - **Real-time Chat**: 1:1 and group (course-linked) conversations with presence, typing indicators, unread counts
 - **Notifications**: View platform notifications
 - **Dashboard**: Snapshot of enrollments, unread chats, notifications, recent resources
@@ -18,7 +21,7 @@ This system supports two roles with role-based access control: Student and Admin
 - **Course Management**: Create, approve, and manage course content & resources
 - **Content Upload**: Upload and curate course materials (PDFs, videos, docs)
 - **User Management**: Activate/deactivate accounts & manage roles
-- **Analytics (Simplified)**: Basic platform usage metrics (academic evaluation analytics removed)
+- **Analytics (Simplified)**: Basic platform usage metrics
 - **Real-time Chat Participation**: Engage in direct/group chats
 
 ## Tech Stack (Active Modules)
@@ -133,24 +136,6 @@ The application will be available at `http://localhost:3000`
 - **Conversations & Messages**: Real-time chat (conversation-scoped messages)
 - **Notifications**: System notifications
 
-Removed collections (legacy): Assignments, Submissions, Grades, Attendance, Inbox Messages.
-
-## Key Features Implementation
-
-### User Account System
-- **Student Registration**: Free and immediate account activation
-- **Admin Oversight**: Full control over course and system management
-
-### Course Enrollment System
-- **Capacity Management**: Automatic enrollment limits with real-time availability
-- **Approval Workflow**: Admin approval required for course activation
-- **Enrollment Validation**: Prevents duplicate enrollments and capacity overflow
-
-### Communication System
-- **Real-time Chat**: Socket.IO-powered direct & group conversations (course-linked groups, invites, typing, presence, unread counts)
-- **User Search**: Filtered search for course-enrolled users when inviting to groups
-- **Notification System**: Platform event notifications
-
 ## Security Features
 
 - **Input Validation**: Comprehensive validation using Express Validator
@@ -231,11 +216,10 @@ Removed collections (legacy): Assignments, Submissions, Grades, Attendance, Inbo
 1. **Registration**: Create account
 2. **Course Discovery**: Browse & enroll
 3. **Learning**: Access materials & resources
-4. **Collaboration**: Engage via direct/group chat
-5. **Stay Informed**: Receive notifications
-
-### Course Ownership
-Courses have an `owner` field referencing the user (currently an admin) who created the course.
+4. **Productivity Management**: Keep track of tasks with priority based filtering, visual statistics and engage timers to start focused study sessions.
+5. **AI-based Learning**: Generate flashcards to test content comprehension, start quizzes to assess personal learning. 
+6. **Collaboration**: Engage via direct/group chat
+7. **Stay Informed**: Receive notifications
 
 ### Admin Workflow (Current)
 1. **Create & Approve Courses**
@@ -246,7 +230,7 @@ Courses have an `owner` field referencing the user (currently an admin) who crea
 
 ### Platform Statistics
 - **User Base**: Students and Administrators
-- **Course Capacity**: Unlimited courses with enrollment limits
+- **Course Capacity**: Unlimited courses with optional enrollment limits
 - **File Handling**: Secure upload/download with type restrictions
 - **Performance**: Optimized for educational workflows
 - **Scalability**: Designed for institutional growth
@@ -255,6 +239,6 @@ Courses have an `owner` field referencing the user (currently an admin) who crea
 
 **CourseMate - Focused Course & Communication Platform**
 
-*Streamlined learning resources, enrollment, and real-time collaboration.*
+*Streamlined learning resources, enrollment and real-time collaboration.*
 
 ---
