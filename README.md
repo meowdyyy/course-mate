@@ -65,7 +65,7 @@ npm install
 ```env
 NODE_ENV=development
 PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/coursemate_db
+MONGODB_URI=[]
 JWT_SECRET=your_super_secret_jwt_key_here_make_it_long_and_secure
 JWT_EXPIRES_IN=7d
 
