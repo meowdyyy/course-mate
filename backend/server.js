@@ -106,6 +106,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Root route: provide a friendly response or redirect to health check so
+// requests to the service root don't return the generic 404 handler below.
+app.get('/', (req, res) => {
+  // Prefer redirect to the health endpoint so deploy tools and browsers
+  // can quickly verify the service status.
+  res.redirect('/api/health');
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
