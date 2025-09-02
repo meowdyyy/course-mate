@@ -14,7 +14,6 @@ function getYouTubeId(url='') {
 }
 
 export default function ResourcePreviewModal({ resource, onClose }) {
-  // Hooks must always run – declare before any conditional returns
   const [tab, setTab] = useState('preview');
   const [summary, setSummary] = useState('');
   const [loadingSummary, setLoadingSummary] = useState(false);
@@ -29,14 +28,14 @@ export default function ResourcePreviewModal({ resource, onClose }) {
   const [expandingAll, setExpandingAll] = useState(false);
   const iframeRef = useRef(null);
 
-  // Auto-scroll conversation panel (must be before any early return to satisfy hooks rules)
+  //Auto-scroll conversation panel 
   useEffect(()=>{
     if (convoEndRef.current) {
       convoEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [conversation, loadingAnswer]);
 
-  // Parse outline from summary when it changes (YouTube only). Must be before any early return to keep hook order stable.
+  //Parse outline from summary when it changes (YouTube only).
   useEffect(()=>{
     if (!resource || !summary) { setOutline([]); return; }
     const rUrl = resource.url || '';
@@ -73,7 +72,8 @@ export default function ResourcePreviewModal({ resource, onClose }) {
   setSummary(res.data.summary);
   if (res.data.file) setSummaryFileMeta(res.data.file);
   if (res.data.video?.isYouTube) {
-    // Optionally could set state for UI hints (quick inline, keep minimal for now)
+   
+    //Optionally could set state for UI hints (quick inline, keep minimal for now)
   }
   try { showCoinLossToast('−2 coins (AI Summarize)'); } catch {}
     } catch (e) {

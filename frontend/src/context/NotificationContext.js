@@ -53,7 +53,7 @@ export const NotificationProvider = ({ children }) => {
     window.addEventListener('addTimerNotification', handleTimerNotification);
 
     return () => {
-      //Do not disconnect on rerenders; only when user logs out handled above
+      //not disconnecting on rerenders, only when user logs out handled above
       window.removeEventListener('addTimerNotification', handleTimerNotification);
     };
   }, [user]);

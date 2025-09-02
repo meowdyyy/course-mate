@@ -47,14 +47,13 @@ export default function Chat() {
   const [groupForm, setGroupForm] = useState({ name: '', courseId: '' });
   const [inviteSearch, setInviteSearch] = useState('');
   const [inviteResults, setInviteResults] = useState([]);
-  const [pendingFiles, setPendingFiles] = useState([]); //File objects selected for upload
+  const [pendingFiles, setPendingFiles] = useState([]);
   const [showInviteControls, setShowInviteControls] = useState(false);
   const inviteDebounce = useRef();
   const bottomRef = useRef();
-  const messagesContainerRef = useRef(null); // scrolling container
-  const atBottomRef = useRef(true); // track whether user was at bottom prior to updates
-  const [atBottom, setAtBottom] = useState(true); // state for UI (jump button)
-  // Removed pause auto-scroll feature per requirement; we now only scroll when opening a conversation
+  const messagesContainerRef = useRef(null);
+  const atBottomRef = useRef(true);
+  const [atBottom, setAtBottom] = useState(true);
   const refreshTimer = useRef(null);
 
   //Init socket
@@ -314,9 +313,7 @@ export default function Chat() {
     typingTimeout.current.timer = setTimeout(() => emitTyping(false), 1200);
   };
 
-  // Smart auto-scroll: only scroll if user was already near bottom or the new message is mine
-  // No automatic scrolling on new messages (only on conversation open). Effect kept minimal for future extensibility.
-  useEffect(() => { /* intentionally empty: disabled auto-scroll */ }, [messages]);
+  useEffect(() => { /* disabled auto-scroll */ }, [messages]);
 
   return (
     <div className="flex h-[70vh] bg-white rounded-lg border overflow-hidden">
@@ -381,7 +378,7 @@ export default function Chat() {
         )}
         {activeConvo && (
           <>
-            {/* Conversation header (sticky outside scroll) */}
+            {/* Conversation header */}
             <div className="border-b bg-white p-3 space-y-2">
               {(() => {
                 const creatorId = typeof activeConvo.creator === 'string' ? activeConvo.creator : activeConvo.creator?._id;
@@ -518,7 +515,7 @@ function SidebarUserPicker({ onSelect, currentUserId }) {
 
 function MessageBubble({ m, currentUserId, lastReadMap }) {
   const isMine = m.sender?._id === currentUserId;
-  //Determine read status: if any other participant's lastReadMessage equals this message id
+  //Determine read status - if any other participant's lastReadMessage equals this message id
   let read = false;
   if (isMine && lastReadMap) {
     Object.entries(lastReadMap).forEach(([uid, mid]) => {

@@ -81,7 +81,7 @@ const courseSchema = new mongoose.Schema({
       default: Date.now
     }
   }],
-  //Student contributed resources (separated from instructor materials)
+  //Student contributed resources 
   studentResources: [{
     title: { type: String, required: true },
     type: {

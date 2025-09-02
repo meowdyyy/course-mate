@@ -34,7 +34,7 @@ const TodoList = () => {
   });
   const [availableTags, setAvailableTags] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-  const pendingCompletionsRef = useRef(new Map()); // todoId -> { timerId, rewardInfo, prevTodo }
+  const pendingCompletionsRef = useRef(new Map()); //todoId -> { timerId, rewardInfo, prevTodo }
 
   const fetchTodos = useCallback(async () => {
     try {
@@ -72,7 +72,7 @@ const TodoList = () => {
     fetchStats();
   }, [filters, fetchTodos]);
 
-  // When timeline reverts a task, refresh list and stats so it shows up in pending
+  //When timeline reverts a task, refresh list and stats so it shows up in pending
   useEffect(() => {
     const onReverted = () => {
       fetchTodos();
@@ -83,8 +83,7 @@ const TodoList = () => {
     return () => window.removeEventListener('todo:reverted', onReverted);
   }, [fetchTodos]);
 
-  // Daily completion reward is handled after finalize in handleToggleTodo to avoid reload/history triggers.
-
+  //Daily completion reward is handled after finalize in handleToggleTodo to avoid reload/history triggers.
   const fetchStats = async () => {
     try {
       const response = await axios.get('/api/todos/stats');
@@ -135,14 +134,14 @@ const TodoList = () => {
 
   const handleToggleTodo = async (todoId) => {
     try {
-      // Capture previous state to determine if we just completed it
+      //Capture previous state to determine if we just completed it
       const prevTodo = todos.find(t => t._id === todoId);
       const response = await axios.put(`/api/todos/${todoId}/toggle`);
       setTodos(prev => {
         const updated = prev.map(todo => 
           todo._id === todoId ? { ...response.data, __justCompleted: !prevTodo?.isCompleted && response.data.isCompleted } : todo
         );
-        // If now completed, remove from main list quickly after animation
+        //If now completed, remove from main list quickly after animation
         if (!prevTodo?.isCompleted && response.data.isCompleted) {
           setTimeout(() => {
             setTodos(p => p.filter(t => t._id !== todoId));
@@ -151,13 +150,13 @@ const TodoList = () => {
         return updated;
       });
       fetchStats();
-      // If just completed, show Undo option and delay rewards for a short window
+      //If just completed, show Undo option and delay rewards for a short window
       if (prevTodo && !prevTodo.isCompleted && response.data.isCompleted) {
         const priority = (response.data.priority || 'Low');
         const priorityCoins = { Low: 1, Medium: 2, High: 3, Urgent: 5 }[priority] || 1;
         const priorityExp = { Low: 0.01, Medium: 0.02, High: 0.03, Urgent: 0.05 }[priority] || 0.01;
 
-        // Emit for timeline immediately
+        //Emit for timeline immediately
         window.dispatchEvent(new CustomEvent('todo:completed', { detail: { todo: response.data } }));
 
         const finalize = async () => {
@@ -165,7 +164,7 @@ const TodoList = () => {
           toast.success(`Task completed! +${priorityCoins} coins, +${Math.round(priorityExp*100)}% EXP`);
           pendingCompletionsRef.current.delete(todoId);
 
-          // Daily completion reward: check after the grace window to avoid false positives on Undo
+          //Daily completion reward: check after the grace window to avoid false positives on Undo
           try {
             const statsRes = await axios.get('/api/todos/stats');
             const st = statsRes.data || {};
@@ -196,12 +195,12 @@ const TodoList = () => {
                   pendingCompletionsRef.current.delete(todoId);
                 }
                 try {
-                  // Toggle again to revert on server
+                  //Toggle again to revert on server
                   await axios.put(`/api/todos/${todoId}/toggle`);
-                  // Bring it back to the list at the top for visibility
+                  //Bring it back to the list at the top for visibility
                   setTodos(prev => [pending?.prevTodo || prevTodo, ...prev]);
                   fetchStats();
-                  // Inform timeline to remove this entry
+                  //Inform timeline to remove this entry
                   window.dispatchEvent(new CustomEvent('todo:uncompleted', { detail: { todoId } }));
                   toast.dismiss(t.id);
                   toast('Undone');

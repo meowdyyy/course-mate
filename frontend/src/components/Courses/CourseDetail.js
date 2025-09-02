@@ -52,7 +52,7 @@ const CourseDetail = () => {
     if (user) {
       fetchStudentResources();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [id, user]);
 
   const fetchCourseDetails = async () => {
@@ -323,8 +323,7 @@ const CourseDetail = () => {
                 <CalendarIcon className="h-5 w-5 mr-3" />
                 <span>{course.credits} Credits • {course.level}</span>
               </div>
-
-              {/* Fees removed (courses are free) */}
+            
 
               <div className="flex items-center text-gray-600">
                 <ClockIcon className="h-5 w-5 mr-3" />
@@ -438,7 +437,7 @@ const CourseDetail = () => {
               const canEditResource = (user?._id === r.uploadedBy?._id && user?.role === 'student' && !r.isApproved) || user?.role === 'admin';
               const canModerate = user?.role === 'admin';
               const canRate = r.isApproved && (user?.role === 'admin' || isEnrolled);
-              const canComment = canRate; // same gating for now
+              const canComment = canRate; 
               const agg = avgRatings[r._id];
               return (
                 <li key={r._id} className="p-4 border rounded-lg">

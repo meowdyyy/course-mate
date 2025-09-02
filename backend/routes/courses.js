@@ -310,7 +310,7 @@ router.post('/:id/material', [
             targetUrl: `/courses/${course._id}`
           }))
         );
-        //Real-time push via socket to each recipient (already handled by post-save hook, but ensure immediate emit list if needed)
+        //Real-time push via socket to each recipient 
         const io = req.app.get('io');
         if (io) {
           createdNotifs.forEach(n => {
@@ -803,7 +803,7 @@ router.delete('/:id/material/:materialId', [auth, authorize('admin')], async (re
       return res.status(404).json({ message: 'Course not found' });
     }
 
-    //Only admin can delete materials (instructor role removed)
+    //Only admin can delete materials 
     if (req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized to delete materials from this course' });
     }
@@ -866,9 +866,5 @@ router.get('/pending', [auth, authorize('admin')], async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching pending courses' });
   }
 });
-
-//@route   GET /api/courses/:id/performance
-//@desc    Get course performance metrics (admin only after instructor removal)
-//@access  Private (Admin only)
 
 module.exports = router;

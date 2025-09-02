@@ -46,8 +46,8 @@ const Flashcards = () => {
   }, [secondsLeft]);
 
   useEffect(() => {
-    fetchCards();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchCards();   
+
   }, []);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Flashcards = () => {
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [index]);
 
   const fetchCards = async () => {

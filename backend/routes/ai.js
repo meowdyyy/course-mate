@@ -8,14 +8,12 @@ const path = require('path');
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 
-// Lightweight fetch polyfill for Node environments lacking global fetch (e.g. older Node runtime)
-// Avoids adding an external dependency; uses https for POST JSON.
 const https = require('node:https');
 const { URL } = require('node:url');
 
 async function simpleFetch(url, options = {}) {
   if (typeof fetch === 'function') {
-    return fetch(url, options); // Native (Node 18+/20+)
+    return fetch(url, options);
   }
   return new Promise((resolve, reject) => {
     try {
@@ -99,8 +97,6 @@ function guessMime(filePath) {
   return 'application/octet-stream';
 }
 
-// Max bytes for directly inlining a file in a Gemini request. Can be overridden via GEMINI_MAX_FILE_BYTES env.
-// Increased default from 8MB to 12MB to allow moderately larger PDFs/videos while balancing memory usage.
 const MAX_INLINE_BYTES = Number(process.env.GEMINI_MAX_FILE_BYTES || 12*1024*1024); // 12MB default
 
 async function buildParts({ title, description, type, url, mode, question, history }) {
@@ -147,13 +143,13 @@ async function callGemini(model, apiKey, promptOrParts) {
 }
 
 const REQUESTED_MODEL_ALIAS = 'googleai/gemini-2.0-flash';
-// Candidate models tried in order (configure most likely valid names)
+// Candidate models in order
 const MODEL_CANDIDATES = [
-  'googleai/gemini-2.0-flash', // user requested (may 404)
-  'gemini-2.0-flash',          // potential shorter alias (future)
-  'gemini-1.5-flash-latest',   // common public name
-  'gemini-1.5-flash',          // older stable
-  'gemini-1.5-pro-latest'      // stronger fallback
+  'googleai/gemini-2.0-flash',
+  'gemini-2.0-flash',          
+  'gemini-1.5-flash-latest',   
+  'gemini-1.5-flash',          
+  'gemini-1.5-pro-latest'
 ];
 
 async function generateWithFallback(prompt, apiKey) {
@@ -225,18 +221,17 @@ router.post('/ask', auth, async (req, res) => {
 
 module.exports = router;
 
-/**
- * Flashcards Generation
- * POST /api/ai/flashcards/:courseId
- * Body: { count?: number }
- * Auth: student must be enrolled (admins/instructors allowed)
- * Returns: { flashcards: [{ id, question, answer, difficulty? }], model, ms }
- */
+//  Flashcards Generation
+//  POST /api/ai/flashcards/:courseId
+//  Body: { count?: number }
+//  Auth: student must be enrolled (admins/instructors allowed)
+//  Returns: { flashcards: [{ id, question, answer, difficulty? }], model, ms }
+ 
 router.post('/flashcards/:courseId', auth, async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return res.status(500).json({ message: 'AI not configured' });
-  // Require coins to use flashcards (2 coins)
+  //Require 2 coins to use flashcards
   const u = await User.findById(req.user._id).select('coins');
   if (!u || (u.coins ?? 0) < 2) return res.status(402).json({ message: 'Not enough coins to use flashcards (2 required)' });
 
@@ -254,7 +249,7 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
       if (!enr) return res.status(403).json({ message: 'You must be enrolled to generate flashcards.' });
     }
 
-    // Build materials list for this course only: instructor materials + approved student resources
+    // Build materials list for this course only (instructor materials + approved student resources)
     let materials = [];
     materials = materials.concat((course.materials || []).map(m => ({
       courseTitle: course.title,
@@ -273,7 +268,7 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
       url: m.url,
       description: m.description || ''
     })));
-    // Inline a small number of local files when available (up to 2 within size limit)
+    
     const inlineParts = [];
     for (const m of materials) {
       const local = resolveLocalFile(m.url || '');
@@ -287,7 +282,6 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
       } catch {}
     }
 
-    // Construct instruction prompt with strict JSON schema output
   const materialLines = materials.slice(0, 50).map((m, i) => `${i + 1}. [${m.type}] ${m.title} - ${m.url} ${m.courseCode ? `(${m.courseCode})` : ''}${m.description ? `\n   Note: ${m.description}` : ''}`).join('\n');
   const contextText = `You are generating study flashcards for the course "${course.title}" (${course.courseCode || ''}).\nCourse description: ${course.description || 'N/A'}\nMaterials (subset from all available course resources, including approved student uploads):\n${materialLines || '[No materials listed]'}\n\nRules:\n- Prioritize attached inline files for factual content.\n- If materials are links without accessible content here, derive conservative, foundational Q&A from the course description and titles (avoid hallucinated specifics not present).\n- Keep questions concise and answerable in 1-3 sentences.\n- Prefer concept checks, definitions, and short application prompts.\n- Return ONLY valid JSON (no markdown, no commentary).`;
 
@@ -310,7 +304,6 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
     const start = Date.now();
     const { text, model, fallback } = await generateWithFallback(parts, apiKey);
 
-    // Attempt to parse JSON strictly; salvage if wrapped
     function tryParseJSON(raw) {
       try { return JSON.parse(raw); } catch {}
       const first = raw.indexOf('['); const last = raw.lastIndexOf(']');

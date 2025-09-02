@@ -92,12 +92,6 @@ notificationSchema.statics.notifyAdmins = async function(title, message, type = 
   }
 };
 
-//Emit socket event after creation
-// Emit socket event after every save that creates a notification.
-// NOTE: In a Mongoose post('save') hook, doc.isNew is already false, so checking it
-// suppresses emission. That was preventing real-time notifications. We intentionally
-// omit the isNew check so creates always broadcast. If later we add updates that
-// shouldn't emit, we can add a flag or use post('insertMany').
 notificationSchema.post('save', function(doc) {
   try {
     if (doc && global._io) {

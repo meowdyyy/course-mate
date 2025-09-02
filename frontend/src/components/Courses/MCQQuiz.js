@@ -26,7 +26,7 @@ export default function MCQQuiz() {
 
   useEffect(() => {
     generate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []);
 
   useEffect(() => {

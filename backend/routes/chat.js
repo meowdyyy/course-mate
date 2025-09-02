@@ -67,7 +67,7 @@ router.get('/conversations/:id/messages', auth, async (req, res) => {
       .limit(limit)
       .populate('sender', 'firstName lastName')
       .populate('receiver', 'firstName lastName');
-    //Ensure attachment URL field present (backfill older messages)
+    //Ensure attachment URL field present
     messages = messages.map(m => {
       const obj = m.toObject();
       if (Array.isArray(obj.attachments)) {
@@ -126,7 +126,7 @@ async function resolveCourse(idOrCode) {
   return await Course.findOne({ courseCode: code }).select('_id owner courseCode');
 }
 
-//Create group conversation (accepts course id or course code)
+//Create group conversation
 router.post('/groups', auth, async (req, res) => {
   try {
     const { name, courseId } = req.body;
@@ -135,7 +135,7 @@ router.post('/groups', auth, async (req, res) => {
     if (!courseId) return res.status(400).json({ message: 'courseId or courseCode required' });
     const course = await resolveCourse(courseId);
     if (!course) return res.status(404).json({ message: 'Course not found for id/code ' + courseId });
-    // Ensure creator is enrolled or course owner (admin already allowed)
+    // Ensure creator is enrolled or course owner
     if (req.user.role === 'student') {
       const Enrollment = require('../models/Enrollment');
       const enrolled = await Enrollment.findOne({ student: req.user._id, course: course._id, status: 'enrolled' });
@@ -316,8 +316,6 @@ router.delete('/groups/:id', auth, async (req, res) => {
   }
 });
 
-//Search users (for group creation) with optional course enrollment filter
-//GET /api/chat/search-users?q=term&courseId=123&limit=10
 router.get('/search-users', auth, async (req, res) => {
   try {
     const { q, courseId } = req.query;
@@ -353,7 +351,6 @@ router.get('/search-users', auth, async (req, res) => {
   }
 });
 
-//Send message with optional attachments via REST (alternative to socket) - multipart/form-data
 const { chatUpload } = require('../middleware/upload');
 router.post('/conversations/:id/message', auth, (req, res) => {
   chatUpload(req, res, async (err) => {
@@ -400,5 +397,4 @@ router.post('/conversations/:id/message', auth, (req, res) => {
     }
   });
 });
-
 module.exports = router;

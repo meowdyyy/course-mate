@@ -30,7 +30,7 @@ export default function MCQResults() {
       } finally { setLoading(false); }
     }
     load();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [id]);
 
   // Show perfect score gif once when coming here; chain level-up after
