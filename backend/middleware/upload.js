@@ -2,11 +2,15 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-//Ensure upload directories exist. 
+// Ensure upload directories exist, creating parent directories as needed
 const uploadDirs = ['uploads/documents', 'uploads/profiles', 'uploads/chat'];
 uploadDirs.forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  try {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  } catch (err) {
+    console.error(`Failed to create directory ${dir}:`, err);
   }
 });
 
