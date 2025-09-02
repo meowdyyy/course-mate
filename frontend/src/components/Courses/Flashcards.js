@@ -46,8 +46,8 @@ const Flashcards = () => {
   }, [secondsLeft]);
 
   useEffect(() => {
-    fetchCards();
-   
+    fetchCards();   
+
   }, []);
 
   useEffect(() => {

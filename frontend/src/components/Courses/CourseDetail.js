@@ -323,7 +323,6 @@ const CourseDetail = () => {
                 <CalendarIcon className="h-5 w-5 mr-3" />
                 <span>{course.credits} Credits • {course.level}</span>
               </div>
-
             
 
               <div className="flex items-center text-gray-600">

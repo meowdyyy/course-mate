@@ -254,6 +254,7 @@ export const FocusTimerProvider = ({ children }) => {
     <FocusTimerContext.Provider value={value}>
       {children}
      
+      {/* Hidden audio element for timer notifications */}
       <audio
         ref={audioRef}
         preload="auto"

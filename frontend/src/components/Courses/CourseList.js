@@ -216,8 +216,8 @@ const CourseList = () => {
                     <CalendarIcon className="h-4 w-4 mr-2" />
                     {course.credits} credits • {course.level}
                   </div>
-                  
-                
+                                  
+
                 </div>
 
                 {/* Enrollment Status */}

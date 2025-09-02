@@ -313,7 +313,6 @@ export default function Chat() {
     typingTimeout.current.timer = setTimeout(() => emitTyping(false), 1200);
   };
 
-
   useEffect(() => { /* disabled auto-scroll */ }, [messages]);
 
   return (

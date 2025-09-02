@@ -221,7 +221,6 @@ router.post('/ask', auth, async (req, res) => {
 
 module.exports = router;
 
-
 //  Flashcards Generation
 //  POST /api/ai/flashcards/:courseId
 //  Body: { count?: number }
@@ -232,7 +231,7 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return res.status(500).json({ message: 'AI not configured' });
-  // Require 2 coins to use flashcards
+  //Require 2 coins to use flashcards
   const u = await User.findById(req.user._id).select('coins');
   if (!u || (u.coins ?? 0) < 2) return res.status(402).json({ message: 'Not enough coins to use flashcards (2 required)' });
 
@@ -269,7 +268,7 @@ router.post('/flashcards/:courseId', auth, async (req, res) => {
       url: m.url,
       description: m.description || ''
     })));
-
+    
     const inlineParts = [];
     for (const m of materials) {
       const local = resolveLocalFile(m.url || '');

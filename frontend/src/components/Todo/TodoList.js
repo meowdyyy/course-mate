@@ -84,7 +84,6 @@ const TodoList = () => {
   }, [fetchTodos]);
 
   //Daily completion reward is handled after finalize in handleToggleTodo to avoid reload/history triggers.
-
   const fetchStats = async () => {
     try {
       const response = await axios.get('/api/todos/stats');

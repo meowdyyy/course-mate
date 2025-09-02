@@ -316,7 +316,6 @@ router.delete('/groups/:id', auth, async (req, res) => {
   }
 });
 
-
 router.get('/search-users', auth, async (req, res) => {
   try {
     const { q, courseId } = req.query;
@@ -351,7 +350,6 @@ router.get('/search-users', auth, async (req, res) => {
     res.status(500).json({ message: 'Failed to search users' });
   }
 });
-
 
 const { chatUpload } = require('../middleware/upload');
 router.post('/conversations/:id/message', auth, (req, res) => {
@@ -399,5 +397,4 @@ router.post('/conversations/:id/message', auth, (req, res) => {
     }
   });
 });
-
 module.exports = router;

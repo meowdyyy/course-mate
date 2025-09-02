@@ -92,7 +92,6 @@ notificationSchema.statics.notifyAdmins = async function(title, message, type = 
   }
 };
 
-
 notificationSchema.post('save', function(doc) {
   try {
     if (doc && global._io) {

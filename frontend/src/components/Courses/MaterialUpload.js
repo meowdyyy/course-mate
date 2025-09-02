@@ -333,5 +333,4 @@ const CourseMaterials = () => {
     </div>
   );
 };
-
 export default CourseMaterials;
