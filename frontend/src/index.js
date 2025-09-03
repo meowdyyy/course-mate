@@ -38,6 +38,10 @@ import axios from 'axios';
 // Dynamic API base (fallback to localhost for local dev)
 const API_BASE = process.env.REACT_APP_API_URL || (window.__API_BASE__ || 'http://localhost:5000');
 axios.defaults.baseURL = API_BASE;
+// Debug: log resolved API base in production to diagnose blank page issues
+if (typeof window !== 'undefined') {
+  console.log('Resolved API_BASE ->', API_BASE);
+}
 
 
 class ErrorBoundary extends React.Component {
@@ -72,3 +76,4 @@ root.render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
