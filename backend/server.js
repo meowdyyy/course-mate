@@ -444,17 +444,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root info route (useful when hitting backend domain directly)
-app.get('/', (req, res) => {
-  res.json({
-    name: 'CourseMate API',
-    status: 'ok',
-    health: '/api/health',
-    uptime: process.uptime(),
-    serverless: !!process.env.VERCEL
-  });
-});
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
