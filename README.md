@@ -1,6 +1,6 @@
-# CourseMate - Study Resource Sharing Platform
+# Course Management Platform (CourseMate)
 
-Modernized MERN application focused on sharing study resources, AI-based practice tools, productivity management, gamification, real-time messaging & notifications. 
+Modernized MERN application focused on courses, enrollments, learning resources, real-time direct & group chat, and notifications. (Legacy assignments, grades, attendance, and inbox-style messaging have been fully removed.)
 
 ## Features Overview
 
@@ -10,9 +10,6 @@ This system supports two roles with role-based access control: Student and Admin
 - **Registration & Profile**: Simple signup and profile management
 - **Course Enrollment**: Browse approved courses and enroll (capacity enforced)
 - **Course Materials & Resources**: Access approved resources and materials after enrollment
-- **AI-powered Learning**: Access Gemini summarized content, ask questions based on the uploaded resources, generate flashcards or start quizzes to assess own learning
-- **Productivity Tools**: Keep track of tasks with subdivisions, categorization, priority & tags, view completion history graphically, engage in focused study sessions using Pomodoro or custom timers
-- **Gamification**: Earn XP for completing focused study sessions, quizzes or practicing with flashcards, level up and stay engaged 
 - **Real-time Chat**: 1:1 and group (course-linked) conversations with presence, typing indicators, unread counts
 - **Notifications**: View platform notifications
 - **Dashboard**: Snapshot of enrollments, unread chats, notifications, recent resources
@@ -21,7 +18,7 @@ This system supports two roles with role-based access control: Student and Admin
 - **Course Management**: Create, approve, and manage course content & resources
 - **Content Upload**: Upload and curate course materials (PDFs, videos, docs)
 - **User Management**: Activate/deactivate accounts & manage roles
-- **Analytics (Simplified)**: Basic platform usage metrics
+- **Analytics (Simplified)**: Basic platform usage metrics (academic evaluation analytics removed)
 - **Real-time Chat Participation**: Engage in direct/group chats
 
 ## Tech Stack (Active Modules)
@@ -136,6 +133,24 @@ The application will be available at `http://localhost:3000`
 - **Conversations & Messages**: Real-time chat (conversation-scoped messages)
 - **Notifications**: System notifications
 
+Removed collections (legacy): Assignments, Submissions, Grades, Attendance, Inbox Messages.
+
+## Key Features Implementation
+
+### User Account System
+- **Student Registration**: Free and immediate account activation
+- **Admin Oversight**: Full control over course and system management
+
+### Course Enrollment System
+- **Capacity Management**: Automatic enrollment limits with real-time availability
+- **Approval Workflow**: Admin approval required for course activation
+- **Enrollment Validation**: Prevents duplicate enrollments and capacity overflow
+
+### Communication System
+- **Real-time Chat**: Socket.IO-powered direct & group conversations (course-linked groups, invites, typing, presence, unread counts)
+- **User Search**: Filtered search for course-enrolled users when inviting to groups
+- **Notification System**: Platform event notifications
+
 ## Security Features
 
 - **Input Validation**: Comprehensive validation using Express Validator
@@ -202,6 +217,23 @@ The application will be available at `http://localhost:3000`
 - Set up file storage system for uploaded content
 - Configure email service for notifications and verification
 
+### Deploying to Vercel (Monorepo)
+Deploy backend and frontend as separate Vercel projects:
+
+1. Backend:
+	- New Project → select repo → Root Directory: `backend`.
+	- Framework Preset: Other.
+	- Env Vars: `MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL` (frontend URL).
+	- Note: WebSockets (Socket.IO) are disabled in Vercel serverless. For real-time chat deploy backend to a persistent host (Render, Railway, Fly.io) and point `REACT_APP_SOCKET_URL` there.
+2. Frontend:
+	- New Project → Root Directory: `frontend`.
+	- Framework Preset: Create React App.
+	- Env Vars: `REACT_APP_API_URL`, optional `REACT_APP_SOCKET_URL`, `GENERATE_SOURCEMAP=false`.
+3. Analytics:
+	- Enable in Vercel dashboard (Project → Analytics). The code already calls `inject()` in `src/index.js`.
+
+Environment templates: see `backend/.env.example` and `frontend/.env.example`.
+
 ### Security Checklist
 - [x] Environment variables secured
 - [x] Database connection with authentication
@@ -216,10 +248,11 @@ The application will be available at `http://localhost:3000`
 1. **Registration**: Create account
 2. **Course Discovery**: Browse & enroll
 3. **Learning**: Access materials & resources
-4. **Productivity Management**: Create tasks, subdivisions, mark task as complete, filter tasks by priority/category, view completed tasks in a graph
-5. **AI-based Learning**: Generate flashcards, start quiz, summarize resource & ask AI for explanations 
-6. **Collaboration**: Engage via direct/group chat
-7. **Stay Informed**: Receive notifications
+4. **Collaboration**: Engage via direct/group chat
+5. **Stay Informed**: Receive notifications
+
+### Course Ownership
+Courses have an `owner` field referencing the user (currently an admin) who created the course.
 
 ### Admin Workflow (Current)
 1. **Create & Approve Courses**
@@ -230,7 +263,7 @@ The application will be available at `http://localhost:3000`
 
 ### Platform Statistics
 - **User Base**: Students and Administrators
-- **Course Capacity**: Unlimited courses with optional enrollment limits
+- **Course Capacity**: Unlimited courses with enrollment limits
 - **File Handling**: Secure upload/download with type restrictions
 - **Performance**: Optimized for educational workflows
 - **Scalability**: Designed for institutional growth
@@ -239,6 +272,6 @@ The application will be available at `http://localhost:3000`
 
 **CourseMate - Focused Course & Communication Platform**
 
-*Streamlined learning resources, enrollment and real-time collaboration.*
+*Streamlined learning resources, enrollment, and real-time collaboration.*
 
 ---
