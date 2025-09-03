@@ -477,7 +477,14 @@ mongoose.connect(process.env.MONGODB_URI, {
   })
   .catch((error) => {
     console.error('MongoDB connection error:', error?.message || String(error));
-    process.exit(1);
+    // Avoid killing Vercel serverless function environment; allow routes to respond with 500 instead
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    } else {
+      app.use((req, res, next) => {
+        return res.status(500).json({ message: 'Database unavailable' });
+      });
+    }
   });
 
 // Handle unhandled promise rejections
