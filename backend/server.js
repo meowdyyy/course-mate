@@ -332,7 +332,6 @@
 //     }
 //   });
 // });
-
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -459,33 +458,33 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Connect to MongoDB (shared across warm serverless invocations)
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => {
-    console.log('Connected to MongoDB');
-    if (!process.env.VERCEL) {
-      const PORT = process.env.PORT || 5000;
-      server.listen(PORT, () => {
-        console.log(`Server + Socket.io running on port ${PORT}`);
-        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-        if (process.env.NODE_ENV === 'development') console.log('To create admin user, run: npm run create-admin');
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('MongoDB connection error:', error?.message || String(error));
-    // Avoid killing Vercel serverless function environment; allow routes to respond with 500 instead
-    if (!process.env.VERCEL) {
-      process.exit(1);
-    } else {
-      app.use((req, res, next) => {
-        return res.status(500).json({ message: 'Database unavailable' });
-      });
-    }
-  });
+async function ensureDb(){
+  if (mongoose.connection.readyState === 1) return; // already connected
+  if (!process.env.MONGODB_URI) {
+    console.error('Missing MONGODB_URI');
+    return;
+  }
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser:true, useUnifiedTopology:true });
+    console.log('Mongo connected');
+  } catch (e) {
+    console.error('Mongo connect failure:', e.message);
+  }
+}
+ensureDb().then(()=>{
+  if (!process.env.VERCEL && server) {
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => {
+      console.log(`Server listening on ${PORT}`);
+    });
+  }
+});
+
+// Reconnect attempt middleware for API routes
+app.use(async (req,res,next)=>{
+  if (mongoose.connection.readyState !==1) await ensureDb();
+  next();
+});
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
