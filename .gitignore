@@ -21,7 +21,6 @@ Thumbs.db
 .env.development.local
 .env.production.local
 backend/.env
-frontend/.env
 
 
 # Build cache
