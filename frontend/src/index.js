@@ -34,11 +34,14 @@ import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import { inject } from '@vercel/analytics';
 
 // Dynamic API base (fallback to localhost for local dev)
 const API_BASE = process.env.REACT_APP_API_URL || (window.__API_BASE__ || 'http://localhost:5000');
 axios.defaults.baseURL = API_BASE;
 
+// Vercel analytics (safe no-op locally if not enabled)
+try { inject(); } catch (_) {}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
